@@ -8,8 +8,6 @@ namespace itis {
   Graph::Graph(int V) {
     parent = new int[V];
 
-    //i 0 1 2 3 4 5
-    //parent[i] 0 1 2 3 4 5
     for (int i = 0; i < V; i++)
       parent[i] = i;
 
@@ -20,13 +18,9 @@ namespace itis {
     G.push_back(make_pair(w, edge(u, v)));
   }
   int Graph::find_set(int i) {
-    // If i is the parent of itself
     if (i == parent[i])
       return i;
     else
-      // Else if i is not the parent of itself
-      // Then i is not the representative of his set,
-      // so we recursively call Find on its parent
       return find_set(parent[i]);
   }
 
@@ -35,12 +29,12 @@ namespace itis {
   }
   void Graph::kruskal() {
     int i, uRep, vRep;
-    sort(G.begin(), G.end()); // increasing weight
+    sort(G.begin(), G.end());
     for (i = 0; i < G.size(); i++) {
       uRep = find_set(G[i].second.first);
       vRep = find_set(G[i].second.second);
       if (uRep != vRep) {
-        T.push_back(G[i]); // add to tree
+        T.push_back(G[i]);
         union_set(uRep, vRep);
       }
     }
