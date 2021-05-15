@@ -1,5 +1,10 @@
 #pragma once
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
 
+#define edge pair<int,int>
 // Заголовочный файл с объявлением структуры данных
 
 namespace itis {
@@ -10,18 +15,24 @@ namespace itis {
   inline constexpr auto kStringConstant = "Hello, stranger!";
 
   // Пример: объявление структуры с полями и методами
-  struct MyStructure {
+  struct Graph {
+   private:
+    vector<pair<int, edge>> G;
+    vector<pair<int, edge>> T; // mst
+    int *parent;
+    int V;
+
    public:
-    int size_{0};
-    int capacity_{0};
-    int* data_{nullptr};
+    Graph(int V);
+    void AddWeightedEdge(int u, int v, int w);
+    int find_set(int i);
+    void union_set(int u, int v);
+    void kruskal();
+    void print();
 
     // Tip 2: На начальном этапе разработки структуры данных можете определения методов задавать в
     // заголовочном файле, как только работа будет завершена, можно будет оставить здесь только объявления.
 
-    int size() const {
-      return size_;
-    }
   };
 
 }  // namespace itis
