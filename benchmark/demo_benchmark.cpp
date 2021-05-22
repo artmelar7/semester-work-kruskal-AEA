@@ -15,51 +15,49 @@ using namespace itis;
 static constexpr auto kDatasetPath = string_view{PROJECT_DATASET_DIR};
 static constexpr auto kProjectPath = string_view{PROJECT_SOURCE_DIR};
 
+vector<int> split(const std::string &s, char delimiter) {
+  vector<int> tokens;
+
+  string token;
+  istringstream tokenStream(s);
+  while (getline(tokenStream, token, delimiter)) {
+    tokens.push_back(stoi(token));
+  }
+  return tokens;
+}
+
 int main(int argc, char **argv) {
 
-  // Tip 1: входные аргументы позволяют более гибко контролировать работу вашей программы.
-  // Можете передать путь до входного/выходного тестового файла в качестве аргумента программы.
+  string str;
+  cout<<"Absolute path to file:";
+  cin>>str;
+  string pathToInputFile = str;
 
-  for (int index = 0; index < argc; index++) {
-    cout << "Arg: " << argv[index] << '\n';
+  ifstream file(pathToInputFile);
+  string result;
+  string line;
+
+  while (getline(file, line)) {
+    vector<int> intValues = split(line, ' ');
+    int n = intValues.size();
+
+    for (int j = 0; j < 10; ++j) {
+      cout<< " " << j << " ";
+      itis::Graph graph(n);
+      int i = 0;
+      for (int value : intValues) {
+        graph.AddWeightedEdge(i, i + 1, value);
+        i++;
+      }
+      auto time_diff = chrono::nanoseconds::zero();
+      const auto time_point_before = chrono::high_resolution_clock::now();
+      graph.kruskal();
+      const auto time_point_after = chrono::high_resolution_clock::now();
+
+      time_diff += time_point_after - time_point_before;
+      const long time_elapsed_ns = chrono::duration_cast<chrono::nanoseconds>(time_diff).count();
+
+      cout << "Kruskal (ns): " << time_elapsed_ns << '\n';
+    }
   }
-
-  // Tip 2: для перевода строки в число можете использовать функцию stoi (string to integer)
-
-  // можете использовать функционал класса stringstream для обработки строки
-  auto ss = stringstream("0 1 2");  // передаете строку (входной аргумент или строку из файла) и обрабатываете ее
-
-  int number = 0;
-  ss >> number;  // number = 0
-  ss >> number;  // number = 1
-  ss >> number;  // number = 2
-
-  // работа с набором данных
-  const auto path = string(kDatasetPath);
-  cout << "Path to the 'dataset/' folder: " << path << endl;
-
-  auto input_file = ifstream(path + "/dataset-example.csv");
-
-  if (input_file) {
-    // чтение и обработка набора данных ...
-  }
-
-  // Контрольный тест: операции добавления, удаления, поиска и пр. над структурой данных
-
-  // Tip 3: время работы программы (или участка кода) можно осуществить
-  // как изнутри программы (std::chrono), так и сторонними утилитами
-
-  const auto time_point_before = chrono::steady_clock::now();
-
-  // здесь находится участок кода, время которого необходимо замерить
-
-  const auto time_point_after = chrono::steady_clock::now();
-
-  // переводим время в наносекунды
-  const auto time_diff = time_point_after - time_point_before;
-  const auto time_elapsed_ns = chrono::duration_cast<chrono::nanoseconds>(time_diff).count();
-
-  cout << "Time elapsed (ns): " << time_elapsed_ns << '\n';
-
-  return 0;
 }
