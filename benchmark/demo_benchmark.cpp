@@ -50,9 +50,9 @@ int main(int argc, char **argv) {
         i++;
       }
       auto time_diff = chrono::nanoseconds::zero();
-      const auto time_point_before = chrono::high_resolution_clock::now();
+      const auto time_point_before = chrono::steady_clock::now();
       graph.kruskal();
-      const auto time_point_after = chrono::high_resolution_clock::now();
+      const auto time_point_after = chrono::steady_clock::now();
 
       time_diff += time_point_after - time_point_before;
       const long time_elapsed_ns = chrono::duration_cast<chrono::nanoseconds>(time_diff).count();
